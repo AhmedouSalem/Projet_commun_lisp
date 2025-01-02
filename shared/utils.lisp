@@ -22,12 +22,19 @@
     ;; Si l'adresse est un registre général
     ((member address '(:R0 :R1 :R2 :R3 :R4 :R5 :R6 :R7 :R8 :R9))
      (register-index address))  ; Utilise `register-index`
+    
     ;; Si l'adresse est un registre spécial
     ((eq address :SP) (vm-stack-pointer vm))  ; Pointeur de pile
     ((eq address :FP) (vm-frame-pointer vm))  ; Pointeur de trame
     ((eq address :PC) (vm-program-counter vm))  ; Compteur de programme
+    
     ;; Si l'adresse est relative, comme (:SP -1)
     ((and (listp address) (eq (first address) :SP))
-     (+ (vm-stack-pointer vm) (second address)))
-    ;; Sinon, erreur
+     (let ((computed-address (+ (vm-stack-pointer vm) (second address))))
+       ;; Vérifie que l'adresse relative est valide
+       (if (or (< computed-address 0) (>= computed-address (length (vm-memory vm))))
+           (error "Adresse relative invalide : ~A" address)
+           computed-address)))  ; Retourne l'adresse résolue si valide
+
+    ;; Sinon, erreur pour les cas non pris en charge
     (t (error "Adresse inconnue ou invalide : ~A" address))))

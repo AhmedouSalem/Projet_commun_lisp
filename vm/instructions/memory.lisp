@@ -16,6 +16,7 @@
 (defun vm-set-register (vm reg-or-address value)
   "Définit une valeur dans un registre ou une adresse dans la pile."
   (let ((resolved (resolve-address vm reg-or-address)))
+    (format t "Mise à jour du registre ~A avec la valeur ~A~%" reg-or-address value)
     (setf (aref (vm-registers vm) resolved) value)))
 
 
@@ -24,6 +25,7 @@
   "Empile `value` (résolu si c'est une constante) sur la pile."
   (let ((sp (vm-stack-pointer vm)))
     (vm-set-memory vm sp (resolve-constant value))  ; Résout les constantes avant de les empiler
+    (format t "Valeur empilée : ~A à SP = ~A~%" value sp)
     (setf (vm-stack-pointer vm) (1+ sp))))
 
 
@@ -31,4 +33,6 @@
   "Dépile une valeur et la retourne."
   (let ((sp (1- (vm-stack-pointer vm))))
     (setf (vm-stack-pointer vm) sp)
-    (vm-get-memory vm sp)))
+    (let ((value (vm-get-memory vm sp)))
+      (format t "Valeur dépilée depuis SP = ~A : ~A~%" sp value)
+      value)))

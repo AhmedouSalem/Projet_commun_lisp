@@ -5,33 +5,55 @@
 
 (defun handle-jeq (vm address)
   "Saute à l'adresse si le drapeau est 'eq'."
-  (when (eq (vm-flag vm) 'eq)
-    (setf (vm-program-counter vm) address)))
+  (if (eq (vm-flag vm) 'eq)
+      (progn
+        (setf (vm-program-counter vm) address)
+        (format t "Saut JEQ effectué vers l'adresse : ~A~%" address))
+      (format t "Saut JEQ ignoré : drapeau = ~A~%" (vm-flag vm))))
 
 
-(defun handle-jne (vm label)
+(defun handle-jne (vm address)
   "Saut conditionnel si le drapeau n'est pas `eq`."
-  (when (not (eq (vm-flag vm) 'eq))
-    (handle-jmp vm label)))
+  (if (not (eq (vm-flag vm) 'eq))
+      (progn
+        (setf (vm-program-counter vm) address)
+        (format t "Saut JNE effectué vers l'adresse : ~A~%" address))
+      (format t "Saut JNE ignoré : drapeau = ~A~%" (vm-flag vm))))
+
 
 (defun handle-jlt (vm address)
   "Saute à l'adresse si le drapeau est 'lt'."
-  (when (eq (vm-flag vm) 'lt)
-    (setf (vm-program-counter vm) address)))
+  (if (eq (vm-flag vm) 'lt)
+      (progn
+        (setf (vm-program-counter vm) address)
+        (format t "Saut JLT effectué vers l'adresse : ~A~%" address)) ; Débogage
+      (format t "Saut JLT ignoré : drapeau = ~A~%" (vm-flag vm)))) ; Débogage
 
 
-(defun handle-jle (vm label)
+
+(defun handle-jle (vm address)
   "Saut conditionnel si le drapeau est `lt` ou `eq`."
-  (when (or (eq (vm-flag vm) 'lt) (eq (vm-flag vm) 'eq))
-    (handle-jmp vm label)))
+  (if (or (eq (vm-flag vm) 'lt) (eq (vm-flag vm) 'eq))
+      (progn
+        (setf (vm-program-counter vm) address)
+        (format t "Saut JLE effectué vers l'adresse : ~A~%" address))
+      (format t "Saut JLE ignoré : drapeau = ~A~%" (vm-flag vm))))
+
 
 (defun handle-jgt (vm address)
   "Saute à l'adresse si le drapeau est 'gt'."
-  (when (eq (vm-flag vm) 'gt)
-    (setf (vm-program-counter vm) address)))
+  (if (eq (vm-flag vm) 'gt)
+      (progn
+        (setf (vm-program-counter vm) address)
+        (format t "Saut JGT effectué vers l'adresse : ~A~%" address))
+      (format t "Saut JGT ignoré : drapeau = ~A~%" (vm-flag vm))))
 
 
-(defun handle-jge (vm label)
+(defun handle-jge (vm address)
   "Saut conditionnel si le drapeau est `gt` ou `eq`."
-  (when (or (eq (vm-flag vm) 'gt) (eq (vm-flag vm) 'eq))
-    (handle-jmp vm label)))
+  (if (or (eq (vm-flag vm) 'gt) (eq (vm-flag vm) 'eq))
+      (progn
+        (setf (vm-program-counter vm) address)
+        (format t "Saut JGE effectué vers l'adresse : ~A~%" address))
+      (format t "Saut JGE ignoré : drapeau = ~A~%" (vm-flag vm))))
+

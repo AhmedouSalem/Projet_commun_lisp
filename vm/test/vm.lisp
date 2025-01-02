@@ -18,9 +18,10 @@
         (program '((PUSH (:CONST 10))    ; Empiler 10
                    (PUSH (:CONST 20))    ; Empiler 20
                    (CMP (:SP -1) :SP)    ; Comparer les deux valeurs (10 < 20)
-                   (JLT 5)               ; Sauter à l'instruction 5 si vrai
+                   (JLT 6)               ; Sauter à l'instruction 6 si vrai
                    (PUSH (:CONST 0))     ; Cette instruction sera ignorée
-                   (JMP 6)               ; Sauter à la fin
+                   (JMP 7)               ; Sauter à la fin
                    (PUSH (:CONST 1)))))  ; Empiler 1 si le saut conditionnel a eu lieu
     (vm-execute vm program)
-    (format t "Test réussi : R0 = ~A (attendu : 1)~%" (vm-get-register vm :R0))))
+    (format t "Pile après exécution : ~A~%" (vm-memory vm))
+    (format t "Valeur finale de R0 : ~A (attendu : 1)~%" (vm-get-register vm :R0))))
